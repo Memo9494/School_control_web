@@ -15,6 +15,7 @@ import cv2
 import os
 import face_recognition
 import time
+from django.contrib.admin.views.decorators import staff_member_required
 
 import numpy as np
 import threading
@@ -39,6 +40,9 @@ class CourseDetailView(DetailView):
         context['alumni_obj'] = CustomUser.objects.filter(courses=self.object, is_staff=False)
         context['attendance_obj'] = Attendance.objects.filter(course=self.object)
         context['participation_obj'] = Participation.objects.filter(course=self.object)
+        context['teacher_obj'] = CustomUser.objects.filter(courses=self.object, is_staff=True)
+        context['user_obj'] = self.request.user
+        context['pk'] = self.object.id
         return context
     
 
@@ -46,7 +50,7 @@ class CourseDetailView(DetailView):
 
 
 
-
+@staff_member_required
 @gzip.gzip_page
 def video_feed(request, pk):
     try:
@@ -75,8 +79,11 @@ class VideoCamera(object):
         
         id = pk
         self.course = Course.objects.get(id=id)
+        print("[PROCESO] Iniciando programa")
+
         
         students =  CustomUser.objects.filter(courses=self.course)
+        print(students)
         self.data_encodings = []
         self.alumni_list = {}
         self.num_alumni = 0

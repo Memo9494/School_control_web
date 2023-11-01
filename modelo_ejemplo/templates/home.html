@@ -2,7 +2,7 @@
 {%block title %} Home {%endblock title%}
 {%block content%}
 {% if user.is_authenticated %}
-    Hi {{user.first_name}}! Welcome, have a look of your classes
+    Hi {{user.username}}! Welcome, have a look of your classes
     {% for course_obj in user.courses.all %}
         <div class="course">
             <h2><a href="{% url 'course_detail' course_obj.pk %}">{{ course_obj.name }}</a></h2>
