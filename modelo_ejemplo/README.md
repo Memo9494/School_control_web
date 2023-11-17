@@ -1,6 +1,4 @@
-Claro, aquí tienes un ejemplo de un README para tu repositorio:
 
----
 
 # Web Server for Organization
 

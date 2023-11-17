@@ -67,6 +67,19 @@ class GetKeypoint(BaseModel):
     LEFT_ANKLE:     int = 15
     RIGHT_ANKLE:    int = 16
 model = YOLO('yolov8_models/yolov8n-pose.pt') # usar modelo de pose
+
+
+
+
+
+
+
+
+
+
+
+
+
 get_keypoint = GetKeypoint()
 stages = [None] * num_alumni
 # Store the track history

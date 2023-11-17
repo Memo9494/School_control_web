@@ -79,6 +79,7 @@ class VideoCamera(object):
         
         id = pk
         self.course = Course.objects.get(id=id)
+        print(self.course)
         print("[PROCESO] Iniciando programa")
 
         
@@ -102,6 +103,7 @@ class VideoCamera(object):
 
             self.alumni_list[self.num_alumni] = {"name":matricula, "attendance": False, "delay":False, "participations":0} # Dicicionario por alumno -> Nombre:[asistencia, conteo]
             self.num_alumni += 1
+
         print(self.course)
         
         self.alumni_asist_cont = np.zeros(self.num_alumni, dtype=int)
@@ -112,6 +114,7 @@ class VideoCamera(object):
         print('[PROCESO] Cargando camara...')
         
         print('[PROCESO] Camara conectada')
+
 
 
         (self.grabbed,self.frame) = self.cap.read()

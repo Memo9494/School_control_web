@@ -25,7 +25,11 @@ SECRET_KEY = 'django-insecure-m)*pe(535gny0*r1apn^n3agz)_ks!x^f_lmv#tm^c^b%hdx%)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+#add ngrok url as allowed host
+CSRF_TRUSTED_ORIGINS = ['https://*']
+
 
 
 # Application definition
@@ -39,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'classes',
     'crispy_forms',
+    'corsheaders',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware', # new
 ]
 
 ROOT_URLCONF = 'modelo_ejemplo.urls'
@@ -102,6 +109,15 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+ALLOWED_ORIGINS = ['http://*', 'https://*']
+CSRF_TRUSTED_ORIGINS = ['https://0672-131-178-102-204.ngrok-free.app'] 
+
+#trusted origins
+
+
+
+
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -126,3 +142,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'classes.CustomUser'
 CRISPY_TEMPLATE_PACK = 'bootstrap4' # new
 LOGIN_REDIRECT_URL = 'home' # new
+LOGOUT_REDIRECT_URL = 'home' # new
+
