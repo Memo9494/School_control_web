@@ -22,16 +22,14 @@ MIDDLEWARE = [
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage' # new
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # new
 
-conntenction_string = os.environ['AZURE_POSTGRESQL_CONNECTIONSTRING']
-parameters = {pair.split('=')[0]: pair.split('=')[1] for pair in conntenction_string.split(' ')}
-
-
+conn_str = os.environ['AZURE_POSTGRESQL_CONNECTIONSTRING']
+conn_str_params = {pair.split('=')[0]: pair.split('=')[1] for pair in conn_str.split(' ')}
 DATABASES = {
     'default': {
-        'engine': 'django.db.backends.postgresql',
-        'NAME': parameters['dbname'],
-        'USER': parameters['user'],
-        'HOST': parameters['host'],
-        'PASSWORD': parameters['password'],
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': conn_str_params['dbname'],
+        'HOST': conn_str_params['host'],
+        'USER': conn_str_params['user'],
+        'PASSWORD': conn_str_params['password'],
     }
 }
