@@ -1,4 +1,5 @@
 
+
 # Web Server for Organization
 
 Este repositorio contiene un servidor web diseñado para la organización, que facilita la gestión de directores, maestros, cursos, alumnos, sus asistencias y participaciones. El proyecto utiliza Django como framework y SQLite3 como base de datos.
