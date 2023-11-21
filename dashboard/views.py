@@ -45,6 +45,9 @@ class CourseDetailView(DetailView):
         context['pk'] = self.object.id
         return context
     
+#create a new view that redirects to the course detail view
+def take_attendance(request, pk):
+    return redirect('course_detail', pk=pk)
 
     
 
