@@ -1,6 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
+from django.contrib.auth import authenticate, login
+
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from django.contrib.auth.views import LoginView
 from .forms import CustomUserCreationForm
 from django.views.decorators.csrf import csrf_protect
 
@@ -11,7 +15,7 @@ class SignUpView(CreateView):
     template_name = 'registration/signup.html'
     
 #Custom login view
-from django.contrib.auth.views import LoginView
+
 @csrf_protect
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'
@@ -22,8 +26,6 @@ class CustomLoginView(LoginView):
     def get_success_url(self):
         return reverse_lazy('dashboard')
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
 
 
 @csrf_protect
@@ -40,3 +42,4 @@ def custom_login(request):
             pass
 
     return render(request, 'registration/login.html')
+

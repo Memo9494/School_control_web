@@ -67,7 +67,7 @@ class VideoCamera(object):
     def __init__(self, pk):
         
         self.start_time_class = round(time.time(),2)  # tiempo de incio de programa
-        self.end_time_class = 30.0
+        self.end_time_class = 25.0
         self.time_lim_attendance = 10.0
         self.attendance_taken = False
         self.fps = 0
@@ -170,7 +170,7 @@ class VideoCamera(object):
             if self.attendance_taken == False:
                 self.attendance_taken = True
                 print("[PROCESO] Tiempo de asistencia a tiempo terminado")
-                indices = [i for i, valor in enumerate(self.alumni_asist_cont) if valor >= 10] # Verificar si aparece mas de 10 veces en ese tiempo
+                indices = [i for i, valor in enumerate(self.alumni_asist_cont) if valor >= 2] # Verificar si aparece mas de 10 veces en ese tiempo
                 for i in indices:
                     self.alumni_list[i]["attendance"] = 1
                 print("[PROCESO] Asistencia tomada")
@@ -276,3 +276,37 @@ class GetKeypoint(BaseModel):
     RIGHT_KNEE:     int = 14
     LEFT_ANKLE:     int = 15
     RIGHT_ANKLE:    int = 16
+
+def attendance_statistics(request):
+    # Obtener datos para el informe
+    attendance_data = Attendance.objects.all()
+    participation_data = Participation.objects.all()
+    attendance_per_course = np.zeros(len(Course.objects.all()), dtype=int)
+    participation_per_course = np.zeros(len(Course.objects.all()), dtype=int)
+    courses_names = []
+
+    for i in range(len(Course.objects.all())):
+        Course.objects.all()[i].attendance_set.all()
+        courses_names.append(Course.objects.all()[i].name)
+        for j in range(len(Course.objects.all()[i].attendance_set.all())):
+            attendance_per_course[i] += Course.objects.all()[i].attendance_set.all()[j].is_attended
+        for j in range(len(Course.objects.all()[i].participation_set.all())):
+            if Course.objects.all()[i].participation_set.all()[j].amount != None:
+                participation_per_course[i] += Course.objects.all()[i].participation_set.all()[j].amount
+
+
+    print(attendance_per_course)
+    print(participation_per_course)
+    print(courses_names)
+
+    # Pasar los datos al template
+    context = {
+        # 'attendance_data': attendance_data,
+        # 'participation_data': participation_data,
+        'attendance_per_course': attendance_per_course,
+        'participation_per_course': participation_per_course,
+        'courses_names': courses_names
+    }
+
+    # Renderizar el template
+    return render(request, 'attendance_statistics.html', context)
