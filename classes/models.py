@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from cryptography.fernet import Fernet
+# from cryptography.fernet import Fernet
 import cv2
 import os
 import face_recognition
