@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,6 +84,18 @@ WSGI_APPLICATION = 'modelo_ejemplo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+# conn_str = "dbname=django host=pruebasdjango-ow4feh6pcs6xe-postgres-server.postgres.database.azure.com port=5432 sslmode=require user=django password=9cnt1c3W8aWNU9F"
+# conn_str_params = {pair.split('=')[0]: pair.split('=')[1] for pair in conn_str.split(' ')}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': conn_str_params['dbname'],
+#         'HOST': conn_str_params['host'],
+#         'USER': conn_str_params['user'],
+#         'PASSWORD': conn_str_params['password'],
+#     }
+# }
 
 DATABASES = {
     'default': {

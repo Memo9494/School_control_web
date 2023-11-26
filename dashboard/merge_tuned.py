@@ -23,11 +23,7 @@ from ultralytics import YOLO
 from pydantic import BaseModel
 from collections import defaultdict
 today = time.strftime("%Y-%m-%d")
-# global alumni_asist_cont
-
-# global alumni_asist_cont
-alumni_asist_cont = None
-
+alumni_asist_cont = 0
 
 class HomeView(ListView):
     model = Course
@@ -97,7 +93,7 @@ def face_recog(frame, data_encodings, attendance_flag, alumni_list, track_id=Non
     return flag
 
 class VideoCamera(object):
-    
+
 
     def __init__(self, pk):
         
@@ -142,12 +138,9 @@ class VideoCamera(object):
             self.num_alumni += 1
 
         print(self.course)
-        global alumni_asist_cont
+        
         self.alumni_asist_cont = np.zeros(self.num_alumni, dtype=int)
         alumni_asist_cont = self.alumni_asist_cont
-        #update global variable
-        # alumni_asist_cont = self.alumni_asist_cont
-        # alumni_asist_cont = self.alumni_asist_cont
 
 
         self.model = YOLO('yolov8_models/yolov8n-pose.pt') # usar modelo de pose
@@ -165,9 +158,8 @@ class VideoCamera(object):
     def __del__(self):
         self.cap.release()
     
-
     def get_frame(self):
-        global alumni_asist_cont
+
         frame = self.frame # Frame leido por la camara
         actual_time = round(time.time(),2) - self.start_time_class
         actual_time = round(actual_time,2)
@@ -180,19 +172,15 @@ class VideoCamera(object):
             self.terminado = True
             print("[PROCESO] Tiempo de clase terminado")
         if self.terminado == True:
-            #create attendance and participation objects
-            print("[PROCESO] Creando objetos de asistencia y participacion")
-            for i in range(self.num_alumni):
                 attendancei = self.alumni_list[i]["attendance"]
                 participationsi = self.alumni_list[i]["participations"]
-                Attendance.objects.create(course=self.course, user=CustomUser.objects.get(username=self.alumni_list[i]["name"]), is_attended =attendancei, date=today)
-                Participation.objects.create(course=self.course, user=CustomUser.objects.get(username=self.alumni_list[i]["name"]), amount=participationsi, date = today)
-            print("[PROCESO] Objetos creados")
-
-            #stop the camera
-            self.cap.release()
-            
-                
+                namei = self.alumni_list[i]["name"]
+                Attendance.objects.create(course=self.course, user=CustomUser.objects.get(username=namei), is_attended =attendancei, date=today)
+                Participation.objects.create(course=self.course, user=CustomUser.objects.get(username=namei), amount=participationsi, date = today) 
+                #close the program
+                self.cap.release()
+                cv2.destroyAllWindows()
+                print("[PROCESO] Programa terminado")
         
 
         results = self.model.track(frame, persist=True) 
@@ -243,10 +231,10 @@ class VideoCamera(object):
                     if rW_y > rEy_y and self.stages[int(track_id-1)] == 0:
                         self.stages[int(track_id-1)]= 1
                         print("[PROCESO] Participación detectada")
-                        face_recog(face_frame, self.data_encodings, self.attendance_taken, self.alumni_list)
+                        face_recog(face_frame, self.data_encodings, attendance_taken, self.alumni_list)
                         
-            if (actual_time > self.time_lim_attendance) and (self.attendance_taken == False):
-                self.attendance_taken = True
+            if (actual_time > self.time_lim_attendance) and (attendance_taken == False):
+                attendance_taken = True
                 print("[PROCESO] Tiempo de asistencia a tiempo terminado")
                 indices = [i for i, valor in enumerate(alumni_asist_cont) if valor >= 10] # Verificar si aparece mas de 10 veces en ese tiempo
                 for i in indices:
